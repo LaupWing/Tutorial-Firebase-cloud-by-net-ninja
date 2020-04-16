@@ -23,4 +23,35 @@ registerForm.addEventListener('submit', e => {
         .catch(error => {
             registerForm.querySelector('p.error').textContent = error.message
         })
+}
+)
+loginForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const email = loginForm.email.value
+    const password = loginForm.password.value
+    firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(user => {
+            console.log('Logged in')
+            console.log(user)
+        })
+        .catch(error => {
+            console.log('Something went wrong')
+            loginForm.querySelector('p.error').textContent = error.message
+        })
+})
+
+
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        authWrapper.classList.remove('open')
+        authModal.forEach(modal => modal.classList.remove('active'))
+    } else {
+        authWrapper.classList.add('open')
+        authModal[0].classList.add('active')
+    }
+})
+
+
+signOut.addEventListener('click', () => {
+    firebase.auth().signOut()
 })
