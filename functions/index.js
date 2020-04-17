@@ -1,14 +1,16 @@
 const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
 
 // auth trigger
 
 exports.newUserSignup = functions.auth.user().onCreate(user=>{
-    console.log('User created')
-    console.log(user)
-    return user
-})
+    return admin.firestore().collection('users').doc(user.uid).set({
+        email: user.email,
+        upvotedOn:[]
+    });
+});
 exports.userDeleted = functions.auth.user().onDelete(user=>{
-    console.log('User deleted')
-    console.log(user)
-    return user
-})
+    const doc =  admin.firestore().collection('users').doc(user.uid);
+    return doc.delete()
+});
