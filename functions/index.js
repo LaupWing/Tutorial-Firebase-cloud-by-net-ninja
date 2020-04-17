@@ -1,12 +1,14 @@
 const functions = require('firebase-functions');
 
-// http request 1
-exports.randomNumber = functions.https.onRequest((req, res)=>{
-    const number = Math.round(Math.random()*100)
-    res.send(number.toString())
+// auth trigger
+
+exports.newUserSignup = functions.auth.user().onCreate(user=>{
+    console.log('User created')
+    console.log(user)
+    return user
 })
-
-
-exports.toTheDojo = functions.https.onRequest((req, res)=>{
-    res.send(number.toString())
+exports.userDeleted = functions.auth.user().onDelete(user=>{
+    console.log('User deleted')
+    console.log(user)
+    return user
 })
