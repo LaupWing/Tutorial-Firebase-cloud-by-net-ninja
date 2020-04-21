@@ -64,8 +64,8 @@ exports.upvote = functions.https.onCall((data, context)=>{
         }).then(()=>{
             // update votes on request
             return request.update({
-                upvotes: admin.firestore.FieldValue.increment(1);
-            })
+                upvotes: admin.firestore.FieldValue.increment(1)
+            });
         });
     })
 })
