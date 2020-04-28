@@ -66,4 +66,24 @@ exports.upvote = functions.https.onCall(async (data, context)=>{
     return request.update({
         upvotes: admin.firestore.FieldValue.increment(1)
     });
-})
+});
+
+
+// Firestore trigger for tracking acivity
+
+exports.logActivities = functions.firestore.document('/{collection}/{id}')
+    .onCreate((snap, context)=>{
+        const {collection} = context.params;
+        const {id} = context.params;
+        console.log(snap.data(), id);
+
+        const activities = admin.firestore().listCollections('activities');
+
+        if(collection === 'requests'){
+            return activities.add({text: 'a new tutorial request was added'});
+        }
+        if(collection === 'users'){
+            return activities.add({text: 'a new user has signed up'});
+        }
+        return null;
+    })
